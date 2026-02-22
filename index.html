@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Seat for Time Slots</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #212121;
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background-color: #ffffff;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-arrow {
+            font-size: 30px;
+            color: #757575;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 630;
+            color: #212121;
+        }
+
+        .menu-dots {
+            font-size: 24px;
+            color: #9e9e9e;
+            font-weight: bolder;
+            cursor: pointer;
+            line-height: 1;
+            letter-spacing: 2px;
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background-color: #dff0fb;
+            padding: 14px 16px;
+            margin: 12px 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #212121;
+            border: 1.5px solid #90caf9;
+            border-radius: 8px;
+        }
+
+        .info-banner a {
+            color: #6A1A9A;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        /* Container */
+        .container {
+            padding: 0 16px 24px;
+            background-color: #f5f5f5;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 19px;
+            font-weight: 500;
+            margin: 20px 0 16px;
+            color: #212121;
+        }
+
+        /* Booking Card */
+        .booking-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 20px;
+            width: 73%;
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .booking-date {
+            font-size: 15px;
+            color: #212121;
+            font-weight: 400;
+        }
+
+        .status-badge {
+            background-color: #e8f5e9;
+            color: #66bb6a;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .booking-id {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #212121;
+        }
+
+        .booking-location {
+            font-size: 14px;
+            color: #212121;
+            margin-bottom: 2px;
+        }
+
+        .booking-time {
+            font-size: 14px;
+            color: #212121;
+            margin-bottom: 12px;
+        }
+
+        .cancel-button {
+            color: #6a1b9a;
+            font-size: 15px;
+            font-weight: 500;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        /* Date Section */
+        .date-label {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 24px 0 16px;
+            color: #212121;
+        }
+
+        .date-selector {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 0 0 16px 0;
+            margin-bottom: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .date-selector::-webkit-scrollbar {
+            display: none;
+        }
+
+        .date-card {
+            min-width: 110px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 14px 12px;
+            text-align: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* Purple selected state — matches the screenshot */
+        .date-card.selected {
+            background-color: #f3e8ff;
+            border: 2px solid #9c4dcc;
+        }
+
+        .date-card.selected .date-day,
+        .date-card.selected .date-number {
+            color: #6a1b9a;
+            font-weight: 500;
+        }
+
+        .date-day {
+            font-size: 15px;
+            color: #212121;
+            margin-bottom: 6px;
+            font-weight: 400;
+        }
+
+        .date-number {
+            font-size: 14px;
+            color: #212121;
+            font-weight: 400;
+        }
+
+        /* City Section */
+        .city-label {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 24px 0 12px;
+            color: #212121;
+        }
+
+        .city-selector {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .city-name {
+            font-size: 15px;
+            color: #000000;
+            font-weight: 400;
+        }
+
+        .dropdown-arrow {
+            color: #c0c0c0;
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            transform: scaleX(1.4);
+        }
+
+        /* Development Center Section */
+        .dc-label {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 28px 0 12px;
+            color: #212121;
+        }
+
+        .dc-selector {
+            border-top: 1px solid #e0e0e0;
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .dc-name {
+            font-size: 15px;
+            color: #000000;
+            font-weight: 500;
+        }
+
+        .expand-arrow {
+            color: #000000;
+            font-size: 20px;
+            font-weight: 500;
+            transition: transform 0.3s;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            transform: scaleX(1.4);
+        }
+
+        .expand-arrow.rotated {
+            transform: rotate(180deg) scaleX(1.4);
+        }
+
+        /* Submit Button */
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #808080;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: not-allowed;
+            margin-top: 65px;
+            text-align: center;
+        }
+
+        .submit-button.active {
+            background-color: #808080;
+            cursor: pointer;
+        }
+
+        .submit-button.active:active {
+            background-color: #6a3de8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="back-arrow" onclick="goBack()">←</div>
+            <div class="header-title">Book Seat for Time Slots</div>
+        </div>
+        <div class="menu-dots">⋮</div>
+    </div>
+
+    <!-- Info Banner -->
+    <div class="info-banner">
+        <a href="#" onclick="showFullDayInfo()">Click Here</a> to view the cities/DCs where only full-day seat booking is enabled.
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Booking Updates Section -->
+        <div class="section-title">Booking Updates</div>
+        
+        <div id="bookingsList">
+            <!-- Bookings will be rendered here -->
+        </div>
+
+        <!-- Date Section -->
+        <div class="date-label">Date</div>
+        <div class="date-selector" id="dateSelector">
+            <!-- Dates will be rendered here -->
+        </div>
+
+        <!-- City Section -->
+        <div class="city-label">City</div>
+        <div class="city-selector" onclick="toggleCityDropdown()">
+            <div class="city-name" id="selectedCity">Noida</div>
+            <div class="dropdown-arrow">˅</div>
+        </div>
+
+        <!-- Development Center Section -->
+        <div class="dc-label">Development Center</div>
+        <div class="dc-selector" onclick="toggleDCExpand()">
+            <div class="dc-name" id="selectedDC">NOIDA-STP</div>
+            <div class="expand-arrow" id="dcArrow">˅</div>
+        </div>
+
+        <!-- Submit Button -->
+        <button class="submit-button" id="submitBtn" onclick="submitBooking()">
+            Get System Allocated Seat
+        </button>
+    </div>
+
+    <script>
+        // Sample bookings data
+        const bookings = [
+            {
+                date: '21-Feb-2026',
+                id: 'NOSTP 02 16 A 034',
+                location: 'Noida, NOSTP, BHUT01, FLOOR-16, A',
+                time: '02:00PM - 08:00PM',
+                status: 'Booked'
+            }
+        ];
+
+        // Cities data
+        const cities = ['Noida', 'Delhi', 'Bangalore', 'Mumbai', 'Pune', 'Hyderabad'];
+        
+        // Development Centers data
+        const developmentCenters = ['NOIDA-STP', 'NOIDA-SEZ', 'DELHI-NCR', 'BANGALORE-TP'];
+
+        // Generate dates dynamically
+        function generateDates() {
+            const dates = [];
+            const today = new Date();
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            for (let i = 1; i < 2; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                dates.push({
+                    day: dayNames[date.getDay()],
+                    date: date.getDate(),
+                    month: monthNames[date.getMonth()],
+                    fullDate: date,
+                    index: i
+                });
+            }
+            
+            return dates;
+        }
+
+        // Render bookings
+        function renderBookings() {
+            const bookingsList = document.getElementById('bookingsList');
+            
+            if (bookings.length === 0) {
+                bookingsList.innerHTML = '';
+                return;
+            }
+            
+            bookingsList.innerHTML = bookings.map((booking, index) => `
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <div class="booking-date">${booking.date}</div>
+                        <div class="status-badge">${booking.status}</div>
+                    </div>
+                    <div class="booking-id">${booking.id}</div>
+                    <div class="booking-location">${booking.location}</div>
+                    <div class="booking-time">${booking.time}</div>
+                    <button class="cancel-button" onclick="cancelBooking(${index})">Cancel</button>
+                </div>
+            `).join('');
+        }
+
+        // Render dates
+        let selectedDateIndex = 1;
+
+        function renderDates() {
+            const dateSelector = document.getElementById('dateSelector');
+            const dates = generateDates();
+            
+            dateSelector.innerHTML = dates.map(dateObj => `
+                <div class="date-card ${dateObj.index === selectedDateIndex ? 'selected' : ''}" 
+                     onclick="selectDate(${dateObj.index})">
+                    <div class="date-day">${dateObj.day}</div>
+                    <div class="date-number">${dateObj.date} ${dateObj.month}</div>
+                </div>
+            `).join('');
+        }
+
+        function selectDate(index) {
+            selectedDateIndex = index;
+            const dates = generateDates();
+            const dateSelector = document.getElementById('dateSelector');
+            dateSelector.innerHTML = dates.map(dateObj => `
+                <div class="date-card ${dateObj.index === selectedDateIndex ? 'selected' : ''}" 
+                     onclick="selectDate(${dateObj.index})">
+                    <div class="date-day">${dateObj.day}</div>
+                    <div class="date-number">${dateObj.date} ${dateObj.month}</div>
+                </div>
+            `).join('');
+            updateSubmitButton();
+        }
+
+        // Toggle city dropdown (placeholder)
+        function toggleCityDropdown() {
+            alert('City selection dropdown would appear here');
+        }
+
+        // Toggle DC expand
+        function toggleDCExpand() {
+            const arrow = document.getElementById('dcArrow');
+            arrow.classList.toggle('rotated');
+        }
+
+        // Cancel booking
+        function cancelBooking(index) {
+            const booking = bookings[index];
+            if (confirm(`Are you sure you want to cancel booking for ${booking.id}?`)) {
+                bookings.splice(index, 1);
+                renderBookings();
+                alert('Booking cancelled successfully');
+            }
+        }
+
+        // Update submit button state
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            if (selectedDateIndex !== null) {
+                submitBtn.classList.add('active');
+            } else {
+                submitBtn.classList.remove('active');
+            }
+        }
+
+        // Submit booking
+        function submitBooking() {
+            const submitBtn = document.getElementById('submitBtn');
+            if (!submitBtn.classList.contains('active')) return;
+            
+            const dates = generateDates();
+            const selectedDate = dates.find(d => d.index === selectedDateIndex);
+            const city = document.getElementById('selectedCity').textContent;
+            const dc = document.getElementById('selectedDC').textContent;
+            
+            alert(`Booking submitted!\n\nDate: ${selectedDate.day} ${selectedDate.date} ${selectedDate.month}\nCity: ${city}\nDevelopment Center: ${dc}`);
+        }
+
+        // Go back
+        function goBack() {
+            if (confirm('Do you want to go back?')) {
+                window.history.back();
+            }
+        }
+
+        // Show full day info
+        function showFullDayInfo() {
+            alert('Cities/DCs where only full-day seat booking is enabled:\n\n- Mumbai\n- Pune\n- Hyderabad');
+        }
+
+        // Initialize the page
+        function init() {
+            renderBookings();
+            renderDates();
+            updateSubmitButton();
+        }
+
+        init();
+    </script>
+</body>
+</html>
