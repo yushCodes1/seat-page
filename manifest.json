@@ -1,9 +1,10 @@
 {
     "name": "Seat Book",
     "short_name": "Seat",
-    "short_url": ".",
+    "short_url": "./",
     "display": "standalone",
-    "background_color": "#ffffff",
+    "orientation": "potrait",
+    "background_color": "#f5f5f5",
     "theme_color": "#7c4dff",
     "icons": [
         {
@@ -18,5 +19,7 @@
             "type": "image/png",
             "purpose": "any maskable"
         }
-    ]
+    ],
+    "categories": ["productivity", "business"],
+    "prefer_related_applications": false
 }
