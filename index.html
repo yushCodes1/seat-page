@@ -1,3 +1,4 @@
+        
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +18,9 @@
     <meta name="apple-mobile-web-app-title" content="Seat Book">
     
     <style>
+        html {
+            font-size: 85%; /* 1% smaller across the entire UI */
+        }
         * {
             margin: 0;
             padding: 0;
@@ -268,6 +272,7 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            margin-bottom: 10px; /* added to reduce gap above button */
         }
 
         .dc-name {
@@ -298,7 +303,7 @@
             background-color: #808080;
             color: #ffffff;
             border: none;
-            border-radius: 4px;
+            border-radius: 10px;
             font-size: 15px;
             font-weight: 500;
             cursor: not-allowed;
@@ -371,9 +376,9 @@
         const bookings = [
             {
                 date: '24-Feb-2026',
-                id: 'NOSTP 02 16 A 034',
+                id: 'NOSTP 02 16 A 030',
                 location: 'Noida, NOSTP, BHUT01, FLOOR-16, A',
-                time: '02:00PM - 08:00PM',
+                time: '08:00AM - 02:00PM',
                 status: 'Booked'
             }
         ];
@@ -527,6 +532,16 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
 
 
 
