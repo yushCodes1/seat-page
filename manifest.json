@@ -1,21 +1,21 @@
 {
     "name": "Seat Book",
     "short_name": "Seat",
-    "short_url": "./",
+    "start_url": "./",
     "display": "standalone",
-    "orientation": "potrait",
+    "orientation": "portrait",
     "background_color": "#f5f5f5",
     "theme_color": "#7c4dff",
     "icons": [
         {
             "src": "letter-i.png",
-            "sizes": "192*192",
+            "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
             "src": "letter-ii.png",
-            "sizes": "512*512",
+            "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
         }
